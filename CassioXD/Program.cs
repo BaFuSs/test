@@ -509,6 +509,7 @@ namespace CassioXD
                 Option.SubMenu("Ultimate").AddItem(new MenuItem("AssistedUltKey", "Assisted Ult Key").SetValue((new KeyBind("R".ToCharArray()[0], KeyBindType.Press))));
                 Option.SubMenu("Drawing").AddItem(new MenuItem("DrawQ", "DrawQ").SetValue(true));
                 Option.SubMenu("Drawing").AddItem(new MenuItem("DrawP", "Draw Prediction").SetValue(true));
+                Option.SubMenu("Drawing").AddItem(new MenuItem("DrawDev", "DONT USE").SetValue(false));
                 Option.AddItem(new MenuItem("MutePlayers", "Mute all Enemys on Load").SetValue(false));
                 Option.AddItem(new MenuItem("Fun", "Killspam").SetValue(false));
                 Option.AddToMainMenu();
@@ -847,7 +848,7 @@ namespace CassioXD
             if (args.WParam == AssistedUltKey)
             {
                 args.Process = false;
-                CastAssistedUlt();
+                //CastAssistedUlt();
             }
             
             if (args.Msg == (uint)WindowsMessages.WM_LBUTTONDOWN)
@@ -863,7 +864,7 @@ namespace CassioXD
 #region Ultimate
         
         public static void CastAssistedUlt()
-        {
+        {/*
             int tbuffer = 0;
             foreach (var target in Targets)
             {
@@ -880,7 +881,7 @@ namespace CassioXD
             if (starget != null)
             {
                 R.Cast(R.GetPrediction(starget, true).CastPosition);
-            }
+            }*/
         }
 
 
@@ -1031,25 +1032,28 @@ namespace CassioXD
         {
             var DrawQ = Option.Item("DrawQ").GetValue<bool>();
             var DrawP = Option.Item("DrawP").GetValue<bool>();
+            var DrawDev = Option.Item("DrawDev").GetValue<bool>();
             var menuItem3 = Option.Item("AimMode").GetValue<StringList>();
             Enum.TryParse(menuItem3.SList[menuItem3.SelectedIndex], out AMode);
             try
             {
                 //Drawing.DrawText(100, 100, System.Drawing.Color.Red, GetEnemyinUltRange().Count().ToString());
                 //Drawing.DrawText(100, 110, System.Drawing.Color.Red, GetEnemyinUltRangefacing().Count().ToString());
-                
-                if (PlayersAngle().Count() > 0)
+                if (DrawDev)
                 {
-                    if (GetBundle(PlayersAngle()).Count() > 0)
+                    if (PlayersAngle().Count() > 0)
                     {
-                        for (var i1 = 0; i1 < GetBundle(PlayersAngle()).Count(); i1++)
+                        if (GetBundle(PlayersAngle()).Count() > 0)
                         {
-                            for (var i2 = 0; i2 < GetBundle(PlayersAngle()).ElementAt(i1).Count(); i2++)
+                            for (var i1 = 0; i1 < GetBundle(PlayersAngle()).Count(); i1++)
                             {
-                                Drawing.DrawText(100 + 200 * i1, 100 + 10 * i2, System.Drawing.Color.Red, (GetBundle(PlayersAngle()).ElementAt(i1).ElementAt(i2).Hero.Name).ToString());
+                                for (var i2 = 0; i2 < GetBundle(PlayersAngle()).ElementAt(i1).Count(); i2++)
+                                {
+                                    Drawing.DrawText(100 + 200 * i1, 100 + 10 * i2, System.Drawing.Color.Red, (GetBundle(PlayersAngle()).ElementAt(i1).ElementAt(i2).Hero.Name).ToString());
+                                }
                             }
-                        }
 
+                        }
                     }
                 }/*
                 if (PlayersAngle().Count() > 0)
