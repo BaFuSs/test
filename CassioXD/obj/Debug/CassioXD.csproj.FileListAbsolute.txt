@@ -1,0 +1,16 @@
+C:\Users\David\Documents\GitHub\test\CassioXD\bin\Release\CassioXD.exe.config
+C:\Users\David\Documents\GitHub\test\CassioXD\bin\Release\CassioXD.exe.manifest
+C:\Users\David\Documents\GitHub\test\CassioXD\bin\Release\CassioXD.application
+C:\Users\David\Documents\GitHub\test\CassioXD\bin\Release\CassioXD.exe
+C:\Users\David\Documents\GitHub\test\CassioXD\bin\Release\CassioXD.pdb
+C:\Users\David\Documents\GitHub\test\CassioXD\bin\Release\clipper_library.dll
+C:\Users\David\Documents\GitHub\test\CassioXD\bin\Release\LeagueSharp.Common.dll
+C:\Users\David\Documents\GitHub\test\CassioXD\bin\Release\LeagueSharp.dll
+C:\Users\David\Documents\GitHub\test\CassioXD\bin\Release\SharpDX.dll
+C:\Users\David\Documents\GitHub\test\CassioXD\bin\Release\SharpDX.Direct3D9.dll
+C:\Users\David\Documents\GitHub\test\CassioXD\bin\Release\LeagueSharp.Sandbox.dll
+C:\Users\David\Documents\GitHub\test\CassioXD\obj\Debug\CassioXD.csprojResolveAssemblyReference.cache
+C:\Users\David\Documents\GitHub\test\CassioXD\obj\Debug\CassioXD.exe.manifest
+C:\Users\David\Documents\GitHub\test\CassioXD\obj\Debug\CassioXD.application
+C:\Users\David\Documents\GitHub\test\CassioXD\obj\Debug\CassioXD.exe
+C:\Users\David\Documents\GitHub\test\CassioXD\obj\Debug\CassioXD.pdb

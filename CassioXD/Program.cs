@@ -37,6 +37,8 @@ namespace CassioXD
         public static int kills = 0;
         public static Random rand = new Random();
 
+        public static double AimAngle = 0;
+
         public static List<string> Messages;
 
 
@@ -71,18 +73,15 @@ namespace CassioXD
             public Ultplayer()
             {
                 Angle = 0;
-                Diff = 0;
                 Hero = null;
             }
-            public Ultplayer(double angle, double diff, Obj_AI_Hero hero)
+            public Ultplayer(double angle, Obj_AI_Hero hero)
             {
 
                 Angle = angle;
-                Diff = diff;
                 Hero = hero;
             }
             public double Angle;
-            public double Diff;
             public Obj_AI_Hero Hero;
         }
 
@@ -386,7 +385,7 @@ namespace CassioXD
             {
                 foreach (var enemy in GetEnemyinUltRange())
                 {
-                    Ultplayer uPlayer = new Ultplayer((GetAngle(Player.Position.To2D(), enemy.Position.To2D()) * 180 / Math.PI), (GetAngle(Player.Position.To2D(), enemy.Position.To2D()) * 180 / Math.PI), enemy);
+                    Ultplayer uPlayer = new Ultplayer((GetAngle(Drawing.WorldToScreen(Player.Position), Drawing.WorldToScreen(enemy.Position)) * 180 / Math.PI), enemy);
                     AList.Add(uPlayer);
                 }
             }
@@ -409,7 +408,7 @@ namespace CassioXD
                         {
                             if (players.ElementAt(i2).Angle - players.ElementAt(i1).Angle < 80)
                             {
-                                Ultplayer uPlayer = new Ultplayer(players.ElementAt(i2).Angle, (players.ElementAt(i2).Angle - players.ElementAt(i1).Angle), players.ElementAt(i2).Hero);
+                                Ultplayer uPlayer = new Ultplayer(players.ElementAt(i2).Angle, players.ElementAt(i2).Hero);
                                 Bundle.Add(uPlayer);
                             }
                         }
@@ -418,7 +417,7 @@ namespace CassioXD
                         {
                             if (players.ElementAt(i1).Angle - players.ElementAt(i2).Angle < 80)
                             {
-                                Ultplayer uPlayer = new Ultplayer(players.ElementAt(i2).Angle, (players.ElementAt(i1).Angle - players.ElementAt(i2).Angle), players.ElementAt(i2).Hero);
+                                Ultplayer uPlayer = new Ultplayer(players.ElementAt(i2).Angle, players.ElementAt(i2).Hero);
                                 Bundle.Add(uPlayer);
                             }
                         }
@@ -481,8 +480,7 @@ namespace CassioXD
 
                 E = new Spell(SpellSlot.E, 700f);
                 E.SetTargetted(0.2f, float.MaxValue);
-                R = new Spell(SpellSlot.R, 82500f);
-                //R = new Spell(SpellSlot.R, 825f);
+                R = new Spell(SpellSlot.R, 825f);
                 R.SetSkillshot(0.3f, (float)(80 * Math.PI / 180 ), float.MaxValue, false, SkillshotType.SkillshotCone);
 
                 SpellList.Add(Q);
@@ -1047,30 +1045,32 @@ namespace CassioXD
                         {
                             for (var i1 = 0; i1 < GetBundle(PlayersAngle()).Count(); i1++)
                             {
-                                for (var i2 = 0; i2 < GetBundle(PlayersAngle()).ElementAt(i1).Count(); i2++)
+                                double buffer = 0;
+                                if (GetBundle(PlayersAngle()).ElementAt(i1).Count() >= 2)
                                 {
-                                    Drawing.DrawText(100 + 200 * i1, 100 + 10 * i2, System.Drawing.Color.Red, (GetBundle(PlayersAngle()).ElementAt(i1).ElementAt(i2).Hero.Name).ToString());
+                                    for (var i2 = 0; i2 < GetBundle(PlayersAngle()).ElementAt(i1).Count(); i2++)
+                                    {
+                                        buffer += GetBundle(PlayersAngle()).ElementAt(i1).ElementAt(i2).Angle;
+                                    }
+                                    AimAngle = buffer / GetBundle(PlayersAngle()).ElementAt(i1).Count();
+                                }
+                                if (buffer != 0)
+                                {
+                                    break;
                                 }
                             }
-
+                        }
+                        if (GetEnemyinUltRange().Count() >= 2)
+                        {
+                            Drawing.DrawText(100, 100, System.Drawing.Color.Red, AimAngle.ToString());
+                            Drawing.DrawLine(Drawing.WorldToScreen(ObjectManager.Player.Position), GetLine2(Drawing.WorldToScreen(ObjectManager.Player.Position), AimAngle / 180 * Math.PI, 300), 1, System.Drawing.Color.Red);
+                            /*if (R.IsReady())
+                            {
+                                R.Cast(GetLine2(Drawing.WorldToScreen(ObjectManager.Player.Position), AimAngle / 180 * Math.PI, 300));
+                                Game.PrintChat("cast ult");
+                            }*/
                         }
                     }
-                }/*
-                if (PlayersAngle().Count() > 0)
-                {
-                    for (var iA = 0; iA < PlayersAngle().Count();iA++)
-                    {
-                        Drawing.DrawText(100, 100 + 10 * iA, System.Drawing.Color.Red, PlayersAngle().ElementAt(iA).Hero.Name.ToString()+ ":" + PlayersAngle().ElementAt(iA).Angle.ToString());
-                    }
-                }
-
-                if (GetEnemyinUltRange() != null)
-                {
-                    for (var iA = 0; iA < GetEnemyinUltRange().Count(); iA++)
-                    {
-                        Drawing.DrawLine(Drawing.WorldToScreen(ObjectManager.Player.Position).X, Drawing.WorldToScreen(ObjectManager.Player.Position).Y, GetLine(Drawing.WorldToScreen(Player.Position), Drawing.WorldToScreen(GetEnemyinUltRange().ElementAt(iA).Position),200).X, GetLine(Drawing.WorldToScreen(Player.Position), Drawing.WorldToScreen(GetEnemyinUltRange().ElementAt(iA).Position), 200).Y, 2, System.Drawing.Color.Red);
-                    }
- 
                 }
                 /*
                 if (DrawP)
@@ -1099,12 +1099,14 @@ namespace CassioXD
                         }
                     }
                 }*/
-
                 if (MainTarget != null && MainTarget.IsVisible)
                     Render.Circle.DrawCircle(MainTarget.Position, 100, System.Drawing.Color.Red);
 
                 if (DrawQ)
-                Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range, System.Drawing.Color.Khaki);
+                {
+                    Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range, System.Drawing.Color.Khaki);
+
+                }
             }
             catch (Exception ex)
             {
