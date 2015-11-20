@@ -42,14 +42,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="CassioXD.exe" size="29696">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="CassioXD.exe" size="30208">
       <assemblyIdentity name="CassioXD" version="2.0.0.3" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>eOBF6kxoCNZ+przipXnVH+4DG9maUamyqDVheFsvXlI=</dsig:DigestValue>
+        <dsig:DigestValue>QCIbFuEfChVXfJUz/RKghKc5Qx2cLXaE5swS8FSt5Rs=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -66,38 +66,38 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="LeagueSharp.dll" size="480256">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="LeagueSharp.dll" size="485376">
       <assemblyIdentity name="LeagueSharp" version="1.0.0.25" publicKeyToken="A41BA14F653257A6" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>QNlI6URDeIuJgMQf21GTg6VI/l0JWwjVXnh2B7PWPZk=</dsig:DigestValue>
+        <dsig:DigestValue>uEhcwRTHSS4dibbYVSfuxaPcrjm6hkb03E0WiCqoafo=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="LeagueSharp.Common.dll" size="1190912">
-      <assemblyIdentity name="LeagueSharp.Common" version="1.0.0.45" language="neutral" processorArchitecture="x86" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="LeagueSharp.Common.dll" size="1112064">
+      <assemblyIdentity name="LeagueSharp.Common" version="1.0.0.46" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>R3cFlCdE+EOAArw47sF2Q983H28JcB8XihKd8S8SgGM=</dsig:DigestValue>
+        <dsig:DigestValue>X+Tzvj337d1wLxBTYIOHXXJ6NmSb4wYkVuAM0oSANSo=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="LeagueSharp.Sandbox.dll" size="30720">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="LeagueSharp.Sandbox.dll" size="31232">
       <assemblyIdentity name="LeagueSharp.Sandbox" version="1.0.0.0" publicKeyToken="0C92CB9C3763A33B" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>6KnUZLlDS9QTbjGuL2Qm6BvEa7KT3Aj6T5Gi3pYetUI=</dsig:DigestValue>
+        <dsig:DigestValue>JxAaJ45UTSRyKLKoInaUL2GkCMuC7iT1xfWvMyU4utI=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

@@ -385,7 +385,7 @@ namespace CassioXD
             {
                 foreach (var enemy in GetEnemyinUltRange())
                 {
-                    Ultplayer uPlayer = new Ultplayer((GetAngle(Drawing.WorldToScreen(Player.Position), Drawing.WorldToScreen(enemy.Position)) * 180 / Math.PI), enemy);
+                    Ultplayer uPlayer = new Ultplayer((GetAngle(Player.Position, enemy.Position) * 180 / Math.PI), enemy);
                     AList.Add(uPlayer);
                 }
             }
@@ -429,7 +429,7 @@ namespace CassioXD
             return BTARG;
         }
 
-        public static double GetAngle(Vector2 StartPos, Vector2 EndPos)
+        public static double GetAngle(Vector3 StartPos, Vector3 EndPos)
         {
             return Math.Atan2((EndPos.Y - StartPos.Y), (EndPos.X - StartPos.X));
         }
@@ -507,7 +507,7 @@ namespace CassioXD
                 Option.SubMenu("Ultimate").AddItem(new MenuItem("AssistedUltKey", "Assisted Ult Key").SetValue((new KeyBind("R".ToCharArray()[0], KeyBindType.Press))));
                 Option.SubMenu("Drawing").AddItem(new MenuItem("DrawQ", "DrawQ").SetValue(true));
                 Option.SubMenu("Drawing").AddItem(new MenuItem("DrawP", "Draw Prediction").SetValue(true));
-                Option.SubMenu("Drawing").AddItem(new MenuItem("DrawDev", "DONT USE").SetValue(false));
+                Option.SubMenu("Drawing").AddItem(new MenuItem("DrawDev", "Dev Draw").SetValue(false));
                 Option.AddItem(new MenuItem("MutePlayers", "Mute all Enemys on Load").SetValue(false));
                 Option.AddItem(new MenuItem("Fun", "Killspam").SetValue(false));
                 Option.AddToMainMenu();
@@ -537,9 +537,9 @@ namespace CassioXD
                 Enum.TryParse(menuItem.SList[menuItem.SelectedIndex], out TMode);
                 
                 var AutoUlt = Option.Item("AutoUlt").GetValue<bool>();
-                /*
+                
                 if (AutoUlt)
-                    CastAutoUltimate();*/
+                    CastAutoUltimate();
 
                 var Fun = Option.Item("Fun").GetValue<bool>();
 
@@ -620,7 +620,8 @@ namespace CassioXD
                     aastatus = false;
                 }
             }
-        }
+
+            }
 #endregion
 
 #region Combo
@@ -885,7 +886,35 @@ namespace CassioXD
 
         public static void CastAutoUltimate()
         {
+            var aUltnF = Option.Item("AutoUltnF").GetValue<Slider>().Value;
+            var aUltF = Option.Item("AutoUltF").GetValue<Slider>().Value;
 
+            if (PlayersAngle().Count() > 0)
+            {
+                if (GetBundle(PlayersAngle()).Count() > 0)
+                {
+                    for (var i1 = 0; i1 < GetBundle(PlayersAngle()).Count(); i1++)
+                    {
+                        double buffer = 0;
+                        if (GetBundle(PlayersAngle()).ElementAt(i1).Count() >= aUltnF)
+                        {
+                            for (var i2 = 0; i2 < GetBundle(PlayersAngle()).ElementAt(i1).Count(); i2++)
+                            {
+                                buffer += GetBundle(PlayersAngle()).ElementAt(i1).ElementAt(i2).Angle;
+                            }
+                            AimAngle = buffer / GetBundle(PlayersAngle()).ElementAt(i1).Count();
+                        }
+                        if (buffer != 0)
+                        {
+                            break;
+                        }
+                    }
+                }
+                if (GetEnemyinUltRange().Count() >= aUltnF && R.IsReady())
+                {
+                        R.Cast(GetLine2(ObjectManager.Player.Position, AimAngle / 180 * Math.PI, 300));
+                }
+            }
         }
 
         public static Tuple<int, List<Obj_AI_Hero>> GetHits(Spell spell)
@@ -996,29 +1025,33 @@ namespace CassioXD
             }
         }
 
-        public static Vector2 GetLine(Vector2 StartPos, Vector2 EndPos, double Range)
+        public static Vector3 GetLine(Vector3 StartPos, Vector3 EndPos, double Range)
         {
-            Vector2 Pos;
-            double x, y;
+            Vector3 Pos;
+            double x, y, z;
 
             x = StartPos.X + Math.Cos(GetAngle(StartPos, EndPos)) * Range;
             y = StartPos.Y + Math.Sin(GetAngle(StartPos, EndPos)) * Range;
+            z = EndPos.Z;
 
             Pos.X = (float)x;
             Pos.Y = (float)y;
+            Pos.Z = (float)z;
 
             return Pos;
         }
-        public static Vector2 GetLine2(Vector2 StartPos, double Angle, double Range)
+        public static Vector3 GetLine2(Vector3 StartPos, double Angle, double Range)
         {
-            Vector2 Pos;
-            double x, y;
+            Vector3 Pos;
+            double x, y,z;
 
             x = StartPos.X + Math.Cos(Angle) * Range;
             y = StartPos.Y + Math.Sin(Angle) * Range;
+            z = StartPos.Z;
 
             Pos.X = (float)x;
             Pos.Y = (float)y;
+            Pos.Z = (float)z;
 
             return Pos;
         }
@@ -1032,6 +1065,8 @@ namespace CassioXD
             var DrawP = Option.Item("DrawP").GetValue<bool>();
             var DrawDev = Option.Item("DrawDev").GetValue<bool>();
             var menuItem3 = Option.Item("AimMode").GetValue<StringList>();
+            var aUltnF = Option.Item("AutoUltnF").GetValue<Slider>().Value;
+            var aUltF = Option.Item("AutoUltF").GetValue<Slider>().Value;
             Enum.TryParse(menuItem3.SList[menuItem3.SelectedIndex], out AMode);
             try
             {
@@ -1046,7 +1081,7 @@ namespace CassioXD
                             for (var i1 = 0; i1 < GetBundle(PlayersAngle()).Count(); i1++)
                             {
                                 double buffer = 0;
-                                if (GetBundle(PlayersAngle()).ElementAt(i1).Count() >= 2)
+                                if (GetBundle(PlayersAngle()).ElementAt(i1).Count() >= aUltnF)
                                 {
                                     for (var i2 = 0; i2 < GetBundle(PlayersAngle()).ElementAt(i1).Count(); i2++)
                                     {
@@ -1060,46 +1095,50 @@ namespace CassioXD
                                 }
                             }
                         }
-                        if (GetEnemyinUltRange().Count() >= 2)
+                        if (GetEnemyinUltRange().Count() >= aUltnF)
                         {
                             Drawing.DrawText(100, 100, System.Drawing.Color.Red, AimAngle.ToString());
-                            Drawing.DrawLine(Drawing.WorldToScreen(ObjectManager.Player.Position), GetLine2(Drawing.WorldToScreen(ObjectManager.Player.Position), AimAngle / 180 * Math.PI, 300), 1, System.Drawing.Color.Red);
-                            /*if (R.IsReady())
-                            {
-                                R.Cast(GetLine2(Drawing.WorldToScreen(ObjectManager.Player.Position), AimAngle / 180 * Math.PI, 300));
-                                Game.PrintChat("cast ult");
-                            }*/
+                            Drawing.DrawLine(Drawing.WorldToScreen(ObjectManager.Player.Position), Drawing.WorldToScreen(GetLine2(ObjectManager.Player.Position, AimAngle / 180 * Math.PI, 300)), 1, System.Drawing.Color.Red);
+                            Render.Circle.DrawCircle((GetLine2(ObjectManager.Player.Position, AimAngle / 180 * Math.PI, 300)), 120, System.Drawing.Color.Green);
                         }
                     }
                 }
-                /*
+
                 if (DrawP)
                 {
-                    foreach (var enemy in Targets)
+                    for (var sw = 0; sw< Targets.Count();sw++)
                     {
-                        if (enemy.IsVisible && !enemy.IsDead)
-                        {
-                            switch (AMode)
-                            {
-                                case AimMode.HitChance:
-                                    Render.Circle.DrawCircle(Q.GetPrediction(enemy, true).CastPosition, Q.Width, System.Drawing.Color.Green);
-                                    break;
-                                case AimMode.Normal:
-                                    Render.Circle.DrawCircle(Q.GetPrediction(enemy, true).CastPosition, Q.Width, System.Drawing.Color.Green);
-                                    break;
-                                case AimMode.XDMode:
-                                    Render.Circle.DrawCircle(PreCastPos(enemy, 0.6f), Q.Width, System.Drawing.Color.Green);
-                                    break;
-                            }
-                            foreach (var Poly in WPPolygon(enemy).ToPolygons())
-                            {
-                                Poly.Draw(System.Drawing.Color.White);
-                            }
-                            InterceptionQ(enemy);
-                        }
+                        Drawing.DrawText(100, 100 + sw * 15, System.Drawing.Color.White, Targets.ElementAt(sw).ChampionName.ToString());
                     }
-                }*/
-                if (MainTarget != null && MainTarget.IsVisible)
+                }
+                        /*
+                        if (DrawP)
+                        {
+                            foreach (var enemy in Targets)
+                            {
+                                if (enemy.IsVisible && !enemy.IsDead)
+                                {
+                                    switch (AMode)
+                                    {
+                                        case AimMode.HitChance:
+                                            Render.Circle.DrawCircle(Q.GetPrediction(enemy, true).CastPosition, Q.Width, System.Drawing.Color.Green);
+                                            break;
+                                        case AimMode.Normal:
+                                            Render.Circle.DrawCircle(Q.GetPrediction(enemy, true).CastPosition, Q.Width, System.Drawing.Color.Green);
+                                            break;
+                                        case AimMode.XDMode:
+                                            Render.Circle.DrawCircle(PreCastPos(enemy, 0.6f), Q.Width, System.Drawing.Color.Green);
+                                            break;
+                                    }
+                                    foreach (var Poly in WPPolygon(enemy).ToPolygons())
+                                    {
+                                        Poly.Draw(System.Drawing.Color.White);
+                                    }
+                                    InterceptionQ(enemy);
+                                }
+                            }
+                        }*/
+                        if (MainTarget != null && MainTarget.IsVisible)
                     Render.Circle.DrawCircle(MainTarget.Position, 100, System.Drawing.Color.Red);
 
                 if (DrawQ)
