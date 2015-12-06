@@ -139,11 +139,11 @@ namespace CassioXD
             float value = 0f;
             if (Hero.IsFacing(Player))
             {
-                value = (50f - Hero.BoundingRadius);
+                value = (10f - Hero.BoundingRadius);
             }
             else
             {
-                value = -(100f - Hero.BoundingRadius);
+                value = -(120f - Hero.BoundingRadius);
             }
             var distance = Delay * Hero.MoveSpeed + value;
             var path = Hero.GetWaypoints();
@@ -1095,9 +1095,9 @@ namespace CassioXD
                                 }
                             }
                         }
-                        if (GetEnemyinUltRange().Count() >= aUltnF)
+                        //if (GetEnemyinUltRange().Count() >= aUltnF)
                         {
-                            Drawing.DrawText(100, 100, System.Drawing.Color.Red, AimAngle.ToString());
+                           // Drawing.DrawText(100, 100, System.Drawing.Color.Red, AimAngle.ToString());
                             Drawing.DrawLine(Drawing.WorldToScreen(ObjectManager.Player.Position), Drawing.WorldToScreen(GetLine2(ObjectManager.Player.Position, AimAngle / 180 * Math.PI, 300)), 1, System.Drawing.Color.Red);
                             Render.Circle.DrawCircle((GetLine2(ObjectManager.Player.Position, AimAngle / 180 * Math.PI, 300)), 120, System.Drawing.Color.Green);
                         }
