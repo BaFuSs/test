@@ -350,13 +350,10 @@ namespace CassioXD
                 {
                     if (target != null && target.IsVisible && !target.IsDead)
                     {
-                        if ((target.HasBuffOfType(BuffType.Poison) && GetPoisonBuffEndTime(target) > (Game.Time + E.Delay)) || Player.GetSpellDamage(target, SpellSlot.E) > target.Health)
-                        {
                             if (target.IsValidTarget(E.Range))
                             {
                                 return target;
                             }
-                        }
                     }
                 }
             }
